@@ -3,3 +3,6 @@ __pycache__/
 .pytest_cache/
 myenv/
 .coverage
+.circleci/
+.gitignore
+READ.md

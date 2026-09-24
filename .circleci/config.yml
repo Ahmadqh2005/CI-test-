@@ -1,7 +1,8 @@
 version: 2.1
 
 jobs:
-  build-and-test:
+  # 1. Continuous Integration: Test & Lint
+  test:
     docker:
       - image: cimg/python:3.10
     steps:
@@ -18,7 +19,30 @@ jobs:
           name: Run tests
           command: pytest --cov=calculator
 
+  # 2. Continuous Delivery: Build & Push Docker Image
+  build-and-push:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Log in to Docker Hub
+          command: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+      - run:
+          name: Build Docker image
+          command: docker build -t $DOCKERHUB_USERNAME/ci-test:latest .
+      - run:
+          name: Push image to Docker Hub
+          command: docker push $DOCKERHUB_USERNAME/ci-test:latest
+
 workflows:
-  test-workflow:
+  ci-cd-pipeline:
     jobs:
-      - build-and-test
+      - test
+      - build-and-push:
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
