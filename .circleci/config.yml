@@ -35,6 +35,9 @@ jobs:
       - run:
           name: Push image to Docker Hub
           command: docker push $DOCKERHUB_USERNAME/ci-test:latest
+      - run:
+          name: Trigger Render Deployment
+          command: curl -X POST "$RENDER_DEPLOY_HOOK"
 
 workflows:
   ci-cd-pipeline:
