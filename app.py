@@ -17,7 +17,9 @@ demo = gr.Interface(
     fn=calculate,
     inputs=[
         gr.Number(label="First Number", value=0),
-        gr.Dropdown(["Add", "Subtract", "Multiply"], label="Operation", value="Add"),
+        gr.Dropdown(
+            ["Add", "Subtract", "Multiply"],
+            label="Operation", value="Add"),
         gr.Number(label="Second Number", value=0),
     ],
     outputs=gr.Number(label="Result"),
