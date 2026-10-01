@@ -19,11 +19,19 @@ def ask_gemini(prompt: str, client=None) -> str:
     if client is None:
         return "Error: GEMINI_API_KEY environment variable is not set."
 
-    try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash-lite",
-            contents=prompt,
-        )
-        return response.text
-    except Exception as e:
-        return f"API Error: {str(e)}"
+    # Active, supported 3.x models
+    models_to_try = ["gemini-3.5-flash-lite", "gemini-3.8-flash"]
+
+    last_error = ""
+    for model_name in models_to_try:
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+            )
+            return response.text
+        except Exception as e:
+            last_error = str(e)
+            continue
+
+    return f"API Error: {last_error}"
