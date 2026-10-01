@@ -17,7 +17,7 @@ jobs:
           command: flake8 .
       - run:
           name: Run tests
-          command: pytest --cov=calculator
+          command: pytest --cov=chat
 
   # 2. Continuous Delivery: Build & Push Docker Image
   build-and-push:
